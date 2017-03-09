@@ -23,6 +23,7 @@ class LevelFourViewController: GameLevelViewController, UITableViewDataSource, U
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        self.loadJSON()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,6 +59,7 @@ class LevelFourViewController: GameLevelViewController, UITableViewDataSource, U
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "simpleMovieCell") as! SimpleMovieTableViewCell
         let movie = self.movies[indexPath.row] as? [String:AnyObject]
+        print(movie?["title"] as! String)
         cell.titleLabel.text = movie!["title"] as? String
         return cell
     }
