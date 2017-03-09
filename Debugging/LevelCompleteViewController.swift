@@ -27,11 +27,11 @@ class LevelCompleteViewController: UIViewController {
         self.levelNumberLabel.text = "Level " + String(self.gameLevel.number) + " Completed"
         self.levelNumberLabel.textColor = self.gameLevel.accentColor
         self.nextLevelButton.backgroundColor = self.gameLevel.accentColor
-        self.checkmarkImage.image = checkmarkImage.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+        self.checkmarkImage.image = checkmarkImage.image!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         checkmarkImage.tintColor = self.gameLevel.accentColor
         self.checkmarkImage.alpha = 0
         
-        UIView.animateWithDuration(1.0, delay: 0.2, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
+        UIView.animate(withDuration: 1.0, delay: 0.2, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.checkmarkImage.alpha = 1
             }, completion: nil)
     }
@@ -45,11 +45,11 @@ class LevelCompleteViewController: UIViewController {
         self.delegate?.playNextLevel()
     }
     
-    @IBAction func nextLevelTapped(sender: UIButton) {
+    @IBAction func nextLevelTapped(_ sender: UIButton) {
         self.playNextLevel()
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent;
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent;
     }    
 }

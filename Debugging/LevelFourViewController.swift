@@ -19,24 +19,24 @@ class LevelFourViewController: GameLevelViewController, UITableViewDataSource, U
         super.viewDidLoad()
         
         let nib = UINib(nibName: "SimpleMovieTableViewCell", bundle: nil)
-        self.tableView.registerNib(nib, forCellReuseIdentifier: "simpleMovieCell")
+        self.tableView.register(nib, forCellReuseIdentifier: "simpleMovieCell")
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.loadJSON()
     }
     
     func loadJSON() {
-        let filePath = NSBundle.mainBundle().pathForResource("Movies", ofType: "json")
-        let fileData = NSData.init(contentsOfFile: filePath!)
+        let filePath = Bundle.main.path(forResource: "Movies", ofType: "json")
+        let fileData = try? Data.init(contentsOf: URL(fileURLWithPath: filePath!))
         
         do {
-            if let responseDictionary = try NSJSONSerialization.JSONObjectWithData(fileData!,
-                options:NSJSONReadingOptions(rawValue:0)) as? [String:AnyObject] {
+            if let responseDictionary = try JSONSerialization.jsonObject(with: fileData!,
+                options:JSONSerialization.ReadingOptions(rawValue:0)) as? [String:AnyObject] {
                     
                     if let movies = responseDictionary["movies"] as? [AnyObject] {
                         self.movies = movies
@@ -47,7 +47,7 @@ class LevelFourViewController: GameLevelViewController, UITableViewDataSource, U
         }
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let movies = movies {
             return movies.count
         } else {
@@ -55,15 +55,15 @@ class LevelFourViewController: GameLevelViewController, UITableViewDataSource, U
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("simpleMovieCell") as! SimpleMovieTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "simpleMovieCell") as! SimpleMovieTableViewCell
         let movie = self.movies[indexPath.row] as? [String:AnyObject]
         cell.titleLabel.text = movie!["title"] as? String
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         self.didFinishLevel()
     }
 }

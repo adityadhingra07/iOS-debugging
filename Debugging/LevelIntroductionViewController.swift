@@ -26,11 +26,11 @@ class LevelIntroductionViewController: UIViewController {
         self.playLevelButton.backgroundColor = self.gameLevel.accentColor
     }
     
-    @IBAction func playLevel(sender: AnyObject) {
+    @IBAction func playLevel(_ sender: AnyObject) {
         self.navigationController?.pushViewController(self.gameLevel.viewController, animated: true)
     }
 
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent;
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent;
     }
 }

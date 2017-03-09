@@ -23,7 +23,7 @@ class LevelOneViewController: GameLevelViewController {
         self.finishLevelButton2.backgroundColor = self.gameLevel.accentColor
     }
 
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent;
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent;
     }
 }

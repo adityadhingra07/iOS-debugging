@@ -26,17 +26,17 @@ class LevelFiveViewController: GameLevelViewController, UITableViewDataSource, U
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
         let nib = UINib(nibName: "MovieTableViewCell", bundle: nil)
-        self.tableView.registerNib(nib, forCellReuseIdentifier: "movieCell")
+        self.tableView.register(nib, forCellReuseIdentifier: "movieCell")
         self.loadJSON()
     }
     
     func loadJSON() {
-        let filePath = NSBundle.mainBundle().pathForResource("Movies", ofType: "json")
-        let fileData = NSData.init(contentsOfFile: filePath!)
+        let filePath = Bundle.main.path(forResource: "Movies", ofType: "json")
+        let fileData = try? Data.init(contentsOf: URL(fileURLWithPath: filePath!))
         
         do {
-            if let responseDictionary = try NSJSONSerialization.JSONObjectWithData(fileData!,
-                options:NSJSONReadingOptions(rawValue:0)) as? [String:AnyObject] {
+            if let responseDictionary = try JSONSerialization.jsonObject(with: fileData!,
+                options:JSONSerialization.ReadingOptions(rawValue:0)) as? [String:AnyObject] {
                     
                     if let movies = responseDictionary["movies"] as? [AnyObject] {
                         self.movies = movies
@@ -48,7 +48,7 @@ class LevelFiveViewController: GameLevelViewController, UITableViewDataSource, U
         }
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let movies = movies {
             return movies.count
         } else {
@@ -56,13 +56,13 @@ class LevelFiveViewController: GameLevelViewController, UITableViewDataSource, U
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("movieCell") as! MovieTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "movieCell") as! MovieTableViewCell
         let movie = self.movies[indexPath.row] as? [String:AnyObject]
         
-        let posterUrl = NSURL(string: posterBaseUrl + (movie!["poster_path"] as! String))
+        let posterUrl = URL(string: posterBaseUrl + (movie!["poster_path"] as! String))
         
-        cell.posterImageView.setImageWithURL(posterUrl!)
+        cell.posterImageView.setImageWith(posterUrl!)
         cell.titleLabel.text = movie!["title"] as? String
         
         if let movieOverview = movie?["overview"] as? String {
@@ -72,8 +72,8 @@ class LevelFiveViewController: GameLevelViewController, UITableViewDataSource, U
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         self.didFinishLevel()
     }
 }

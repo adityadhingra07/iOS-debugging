@@ -27,7 +27,7 @@ class GameLevelViewController: UIViewController {
         self.delegate?.didFinishLevel()
     }
     
-    @IBAction func finishLevelTapped(sender: AnyObject) {
+    @IBAction func finishLevelTapped(_ sender: AnyObject) {
         self.didFinishLevel()
     }
 }

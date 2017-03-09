@@ -14,7 +14,7 @@ class HomeViewController: UIViewController, GameLevelViewControllerDelegate, Lev
     @IBOutlet weak var detailsLabel: UILabel!
     
     let lastLevelCompletedKey = "last_level_completed"
-    let userDefaults = NSUserDefaults.standardUserDefaults()
+    let userDefaults = UserDefaults.standard
     
     var currentLevel = 0
 
@@ -31,7 +31,7 @@ class HomeViewController: UIViewController, GameLevelViewControllerDelegate, Lev
         super.viewDidLoad()
         
         // Sets to level zero if no progress saved
-        self.currentLevel = userDefaults.integerForKey(lastLevelCompletedKey)
+        self.currentLevel = userDefaults.integer(forKey: lastLevelCompletedKey)
         if currentLevel >= levels.count {
             currentLevel = 0
         }
@@ -39,12 +39,12 @@ class HomeViewController: UIViewController, GameLevelViewControllerDelegate, Lev
         self.detailsLabel.text = "Welcome to the Debugging Game!\n\nThis game has \(self.levels.count) levels. Each level has a bug. It is your responsibility to debug each issue and fix it to advance to the next level."
     }
 
-    @IBAction func startGameTapped(sender: AnyObject) {
+    @IBAction func startGameTapped(_ sender: AnyObject) {
         self.launchNextLevel()
     }
     
     func didFinishLevel() {
-        userDefaults.setInteger(self.currentLevel + 1, forKey: lastLevelCompletedKey)
+        userDefaults.set(self.currentLevel + 1, forKey: lastLevelCompletedKey)
         userDefaults.synchronize()
         
         self.launchLevelComplete()
@@ -62,7 +62,7 @@ class HomeViewController: UIViewController, GameLevelViewControllerDelegate, Lev
         if self.currentLevel == self.levels.count - 1 {
             self.launchGameComplete()
         } else {
-            self.currentLevel++
+            self.currentLevel += 1
             self.launchNextLevel()
         }
     }
@@ -84,11 +84,11 @@ class HomeViewController: UIViewController, GameLevelViewControllerDelegate, Lev
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent;
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent;
     }
 
-    class func UIColorFromRGB(rgbValue: Int) -> UIColor {
+    class func UIColorFromRGB(_ rgbValue: Int) -> UIColor {
         return UIColor(red: ((CGFloat)((rgbValue & 0xFF0000) >> 16))/255.0, green: ((CGFloat)((rgbValue & 0x00FF00) >>  8))/255.0, blue: ((CGFloat)((rgbValue & 0x0000FF) >>  0))/255.0, alpha: 1.0)
     }
 }
